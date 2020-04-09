@@ -1,8 +1,9 @@
-from __future__ import division
-from ROOT import *
-import numpy as np
+from ROOT import (
+    ROOT, 
+    RDataFrame,
+)
 
-EnableImplicitMT()
+ROOT.EnableImplicitMT()
 #get file and tree from directory
 input_ntuple = "/data/bfys/jdevries/gangadir/workspace/jdevries/LocalXML/135/DaVinci_jpsiphiNtuple_MC_minbiasupgrade.root"
 input_tree_name = "Bs2jpsiphi/DecayTree"
@@ -14,9 +15,9 @@ df_cuts = dataframe.Filter(cuts)
 nentries = df_cuts.Count()
 print(nentries)
 
-df_right_tag = dataframe((Bs_OSMuon_TAGDEC == 1 && Bs_TRUEID == 1) || (Bs_OSMuon_TAGDEC == -1 && Bs_TRUEID == -1))
-df_wrong_tag = dataframe((Bs_OSMuon_TAGDEC == 1 && Bs_TRUEID != 1) || (Bs_OSMuon_TAGDEC == -1 && Bs_TRUEID != -1))
-df_untagged = dataframe(Bs_OSMuon_TAGDEC = 0)
+df_right_tag = dataframe.Filter("(Bs_OSMuon_TAGDEC == 1 && Bs_TRUEID == 1) || (Bs_OSMuon_TAGDEC == -1 && Bs_TRUEID == -1)")
+df_wrong_tag = dataframe.Filter("(Bs_OSMuon_TAGDEC == 1 && Bs_TRUEID != 1) || (Bs_OSMuon_TAGDEC == -1 && Bs_TRUEID != -1)")
+df_untagged = dataframe.Filter("Bs_OSMuon_TAGDEC = 0")
 
 R = df_right_tag.Count().GetValue()
 W = df_wrong_tag.Count().GetValue()
